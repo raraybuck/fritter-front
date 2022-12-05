@@ -77,7 +77,7 @@ const isAccountExists = async (req: Request, res: Response, next: NextFunction) 
 /**
  * Checks if a username in req.body is already in use
  */
-const isUsernameNotAlreadyInUse = async (req: Request, res: Response, next: NextFunction) => {
+ const isUsernameNotAlreadyInUse = async (req: Request, res: Response, next: NextFunction) => {
   if (req.body.username !== undefined) { // If username is not being changed, skip this check
     const user = await UserCollection.findOneByUsername(req.body.username);
 
@@ -123,7 +123,7 @@ const isUserLoggedOut = (req: Request, res: Response, next: NextFunction) => {
 };
 
 /**
- * Checks if a user with userId as author id in req.query exists
+ * Checks if a user with username as author in req.query exists
  */
 const isAuthorExists = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.query.author) {

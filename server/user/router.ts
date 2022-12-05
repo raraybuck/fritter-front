@@ -4,6 +4,7 @@ import FreetCollection from '../freet/collection';
 import UserCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as util from './util';
+import PersonaCollection from '../persona/collection';
 
 const router = express.Router();
 
@@ -78,6 +79,7 @@ router.delete(
   ],
   (req: Request, res: Response) => {
     req.session.userId = undefined;
+    req.session.personaId = undefined;
     res.status(200).json({
       message: 'You have been logged out successfully.'
     });
@@ -156,13 +158,15 @@ router.patch(
 router.delete(
   '/',
   [
-    userValidator.isUserLoggedIn
+    userValidator.isUserLoggedIn,
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     await UserCollection.deleteOne(userId);
     await FreetCollection.deleteMany(userId);
+    await PersonaCollection.deleteMany(userId);
     req.session.userId = undefined;
+    req.session.personaId = undefined;
     res.status(200).json({
       message: 'Your account has been deleted successfully.'
     });
